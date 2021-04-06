@@ -5,19 +5,22 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime"
 	"time"
 
 	"github.com/lestrrat/go-strftime"
 )
 
-const Version = 1.0
+const version = "1.0.0"
+
+var revision = "HEAD"
 
 func main() {
 	var (
 		fd          *os.File
 		err         error
 		format      = flag.String("f", "%Y-%m-%d %H:%M:%S", "format")
-		showVersion = flag.Bool("V", false, "show version")
+		showVersion = flag.Bool("version", false, "show version")
 	)
 
 	flag.Usage = func() {
@@ -30,7 +33,7 @@ Options:
   -f format
     default is "%Y-%m-%d %H:%M:%S"
 
-  -V
+  -version
     output version information and exit
 
   --help
@@ -41,7 +44,12 @@ Options:
 	flag.Parse()
 
 	if *showVersion {
-		fmt.Printf("ts/v%.1f\n", Version)
+		fmt.Printf(
+			"ts %s (rev: %s/%s)\n",
+			version,
+			revision,
+			runtime.Version(),
+		)
 		os.Exit(0)
 	}
 
